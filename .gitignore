@@ -1,0 +1,5 @@
+plan.txt
+.env
+venv/
+__pycache__/
+data/raw
