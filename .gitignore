@@ -3,3 +3,4 @@ plan.txt
 venv/
 __pycache__/
 data/raw
+logs/etl.log
