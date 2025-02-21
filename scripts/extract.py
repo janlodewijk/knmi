@@ -1,66 +1,56 @@
 import requests
 import logging
-from datetime import datetime
 import os
+from zipfile import ZipFile
 
-def extract(url, api_key, save_path='data/raw'):
+def extract(url, save_path='data/raw/'):
     """
-    Extracts data from the KNMI API.
+    Extracts weather data from the last month from the KNMI API.
     
     Args:
-        api_key (str): The API key for the KNMI API.
+        url (str): The download URL.
 
     Returns:
-        Raw data from the KNMI API.
+        Weather data from the last month.
     """
     
-    headers = {
-        'Authorization': f'Bearer {api_key}'
-    }
-
     try:
-        # Make a GET request to the KNMI API
-        response = requests.get(url, headers=headers)
+        # Make a GET request to download the file
+        response = requests.get(url)
         response.raise_for_status()
-        logging.info('Successful API request')
+        logging.info('Succesful URL request')
         
-        #Parse the JSON response and retrieve the keys
-        json_response = response.json()['files']
+        knmi_data = response.content
         
-        # Convert last modified date to datetime object
-        for i in json_response:
-            i['lastModified'] = datetime.strptime(i['lastModified'], '%Y-%m-%dT%H:%M:%S%z')
+        # Make sure the save path exists
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
         
-        # Identify the file with the max timestamp
-        latest_file = max(json_response, key=lambda x: x['lastModified'])
-        
-        # Retrieve only the filename of the file with the max timestamp
-        latest_file_name = latest_file['filename']
-        logging.info(f'Latest file found: {latest_file_name}')
-        
-        # Use the extracted filename to download the file
-        download_url = f'https://api.dataplatform.knmi.nl/open-data/v1/datasets/knmi_synop_hourly_decoded/versions/1/files/{latest_file_name}'
-        
+        # Save the file to the specified path:
+        with open(os.path.join(save_path, 'data.zip'), 'wb') as f:
+            f.write(knmi_data)
+            logging.info('Zip file saved')
+
+        # Extract the data from the zip file
         try:
-            # Make a GET request to the download the file
-            response_2 = requests.get(download_url, headers=headers)
-            response_2.raise_for_status()
-            logging.info(f'Successful file downloaded {latest_file_name}')
-            
-            # Make sure the save path exists
-            os.makedirs(save_path, exist_ok=True)
-            
-            # Save the file to the specified path
-            file_path = os.path.join(save_path, latest_file_name)
-            with open(file_path, 'wb') as file:
-                file.write(response_2.content)
-                logging.info(f'File saved to {file_path}')
-                return file_path            
-            
-        except requests.exceptions.RequestException as e:
-            logging.error(f'Error during file download: {e}')
-            return None
-         
+            with ZipFile(os.path.join(save_path, 'data.zip'), 'r') as zip_ref:
+                zip_ref.extractall(save_path)
+                logging.info('Zip file unzipped')
+                
+                # Close the zip file
+                zip_ref.close()
+                
+                # Remove the zip file
+                os.remove(os.path.join(save_path, 'data.zip'))
+                logging.info('Original zip file removed')
+                
+        except Exception as e:
+            logging.error(f'Error extracting zip file: {e}')
+            return None        
+        
     except requests.exceptions.RequestException as e:
-        logging.error(f'Error during API request: {e}')
+        logging.error(f'Error: {e}')
         return None
+    
+
+    

@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from utils import setup_logger
 from extract import extract
+from transform import transform
 import os
 import logging
 
@@ -10,8 +11,13 @@ if __name__ == '__main__':
     setup_logger()
     logging.basicConfig(level=logging.INFO)
 
-url = 'https://api.dataplatform.knmi.nl/open-data/v1/datasets/knmi_synop_hourly_decoded/versions/1/files'
+url = 'https://cdn.knmi.nl/knmi/map/page/klimatologie/gegevens/uurgegevens/vorigemaand.zip'
 api_key = os.getenv('knmi_api')
 
-file_path = extract(url, api_key)
-print(file_path)
+extract(url)
+
+file_path = 'data/raw/vorigemaand.txt'
+
+df = transform(file_path)
+
+print(df.head())
