@@ -14,10 +14,12 @@ if __name__ == '__main__':
 url = 'https://cdn.knmi.nl/knmi/map/page/klimatologie/gegevens/uurgegevens/vorigemaand.zip'
 api_key = os.getenv('knmi_api')
 
-extract(url)
+# extract(url)
 
 file_path = 'data/raw/vorigemaand.txt'
 
 df = transform(file_path)
 
 print(df.head())
+print(df.shape)
+print(df.isna().sum())
