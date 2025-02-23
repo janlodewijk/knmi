@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from utils import setup_logger
 from extract import extract
+from load import load
 from transform import transform
 import os
 import logging
@@ -13,13 +14,10 @@ if __name__ == '__main__':
 
 url = 'https://cdn.knmi.nl/knmi/map/page/klimatologie/gegevens/uurgegevens/vorigemaand.zip'
 api_key = os.getenv('knmi_api')
-
-# extract(url)
-
 file_path = 'data/raw/vorigemaand.txt'
+
+extract(url)
 
 df = transform(file_path)
 
-print(df.head())
-print(df.shape)
-print(df.isna().sum())
+load(df)
