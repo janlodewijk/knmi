@@ -40,20 +40,20 @@ def transform(file_path):
     # Filter for stations with temperature data
     weather_data = relevant_data.dropna(subset=['temp_time_observation'])
     
-    # Make sure the data is in the right format
-    weather_data['station_number'] = weather_data['station_number'].astype(int)
-    weather_data['date'] = pd.to_datetime(weather_data['date']).dt.strftime('%Y-%m-%d')
-    weather_data['hour'] = weather_data['hour'].astype(int)
+    # Make sure the data is in the right format. Use .loc to avoid SettingWithCopyWarning
+    weather_data.loc[:, 'station_number'] = weather_data['station_number'].astype(int)
+    weather_data.loc[:, 'date'] = pd.to_datetime(weather_data['date']).dt.strftime('%Y-%m-%d')
+    weather_data.loc[:, 'hour'] = weather_data['hour'].astype(int)
     
     # Convert numerical columns to proper data types
     num_cols = ['avg_windspeed_1h', 'temp_time_observation', 'precip_dur_decim', 'hourly_precip_mm', 'air_press_hPa']
     for col in num_cols:
-        weather_data[col] = pd.to_numeric(weather_data[col], errors='coerce')  # Convert to float, setting errors to NaN
+        weather_data.loc[:, col] = pd.to_numeric(weather_data[col], errors='coerce')  # Convert to float, setting errors to NaN
     
     # Convert categorical/weather-related columns to string and remove spaces
     categorical_cols = ['wind_direction', 'fog', 'snow', 'thunder']
     for col in categorical_cols:
-        weather_data[col] = weather_data[col].astype(str).str.strip()
+        weather_data.loc[:, col] = weather_data[col].astype(str).str.strip()
     
     # Reset filter
     weather_data = weather_data.reset_index(drop=True)

@@ -21,12 +21,8 @@ def load(df, file_path='data/processed/weather_data.csv'):
         # Add the new data to the existing data
         complete_data = pd.concat([existing_data, df])
         
-        print('Shape before dropping duplicates', complete_data.shape)
-        
         # Drop the duplicates
         complete_data = complete_data.drop_duplicates(subset=['station_number', 'date', 'hour'], keep='last').reset_index(drop=True)
-        
-        print('Shape after dropping duplicates', complete_data.shape)
         
         # Save data to the file path
         complete_data.to_csv(file_path, mode='w', index=False)
