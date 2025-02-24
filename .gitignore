@@ -4,3 +4,4 @@ venv/
 __pycache__/
 data/
 logs/etl.log
+reports/

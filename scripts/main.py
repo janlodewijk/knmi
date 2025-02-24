@@ -6,6 +6,8 @@ from transform import transform
 from visualize import temperature_trends
 import os
 import logging
+import matplotlib.pyplot as plt
+
 
 load_dotenv()
 
@@ -23,4 +25,5 @@ df = transform(file_path)
 load(df)
 
 #Perform the visualization
-temperature_trends()
+fig = temperature_trends()
+fig.savefig('reports/figures/temperature_trends.png', dpi=300, bbox_inches='tight')

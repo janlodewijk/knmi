@@ -50,9 +50,6 @@ def transform(file_path):
     # Convert the hour to a string with leading zeros if needed
     weather_data.loc[:, 'hour'] = weather_data['hour'].astype(str).str.zfill(2)
     
-    print(weather_data['date'].unique())
-    print(weather_data['hour'].unique())
-    
     # Combine date and hour to create a datetime column
     weather_data.loc[:, 'datetime'] = pd.to_datetime(weather_data['date'] + ' ' + weather_data['hour'], format='%Y-%m-%d %H')
     
