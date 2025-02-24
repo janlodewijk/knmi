@@ -171,7 +171,7 @@ Wind speed & precipitation correlation analysis
 
 Example Temperature Trend Plot
 
-![Sample Plot](reports/figures/temperature_trend.png)
+
 
 💜 License
 
