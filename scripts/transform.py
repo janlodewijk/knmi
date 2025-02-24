@@ -38,17 +38,31 @@ def transform(file_path):
     relevant_data = relevant_data.replace('', np.nan)
     
     # Filter for stations with temperature data
-    weather_data = relevant_data.dropna(subset=['temp_time_observation'])
+    weather_data = relevant_data.dropna(subset=['temp_time_observation']).copy()
     
     # Make sure the data is in the right format. Use .loc to avoid SettingWithCopyWarning
     weather_data.loc[:, 'station_number'] = weather_data['station_number'].astype(int)
     weather_data.loc[:, 'date'] = pd.to_datetime(weather_data['date']).dt.strftime('%Y-%m-%d')
-    weather_data.loc[:, 'hour'] = weather_data['hour'].astype(int)
+    
+    # Subtract 1 from each hour to get the coming hour instead of the past hour
+    weather_data.loc[:, 'hour'] = weather_data['hour'].astype(float).astype(int) - 1
+    
+    # Convert the hour to a string with leading zeros if needed
+    weather_data.loc[:, 'hour'] = weather_data['hour'].astype(str).str.zfill(2)
+    
+    print(weather_data['date'].unique())
+    print(weather_data['hour'].unique())
+    
+    # Combine date and hour to create a datetime column
+    weather_data.loc[:, 'datetime'] = pd.to_datetime(weather_data['date'] + ' ' + weather_data['hour'], format='%Y-%m-%d %H')
     
     # Convert numerical columns to proper data types
     num_cols = ['avg_windspeed_1h', 'temp_time_observation', 'precip_dur_decim', 'hourly_precip_mm', 'air_press_hPa']
     for col in num_cols:
         weather_data.loc[:, col] = pd.to_numeric(weather_data[col], errors='coerce')  # Convert to float, setting errors to NaN
+    
+    # Divide the temperature by 10 to get the actual temperature
+    weather_data.loc[:, 'temp_time_observation'] = weather_data['temp_time_observation'] / 10
     
     # Convert categorical/weather-related columns to string and remove spaces
     categorical_cols = ['wind_direction', 'fog', 'snow', 'thunder']
