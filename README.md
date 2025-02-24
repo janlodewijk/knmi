@@ -1,20 +1,18 @@
-🌦️ Weather Data ETL Project
+# 🌦️ Weather Data ETL Project
 
-📌 Overview
+## 📌 Overview
+This project fetches, processes, and visualizes weather data from the **Dutch KNMI API**. It follows an **ETL (Extract, Transform, Load)** pipeline and stores the data in CSV format for further analysis using Matplotlib and Seaborn.
 
-This project fetches, processes, and visualizes weather data from the Dutch KNMI API. It follows an ETL (Extract, Transform, Load) pipeline and stores the data in CSV format for further analysis using Matplotlib and Seaborn.
-
-🚀 Features
-
-✅ Fetches hourly weather data from the KNMI API or direct KNMI downloads
+## 🚀 Features
+✅ Fetches **hourly** weather data from the KNMI API or direct KNMI downloads
 ✅ Cleans and transforms data into a structured format
-✅ Saves processed data as a CSV file with incremental updates
-✅ Removes duplicate entries to ensure data consistency
-✅ Generates visualizations using Matplotlib & Seaborn
+✅ Saves processed data as a CSV file with **incremental updates**
+✅ Removes **duplicate entries** to ensure data consistency
+✅ Generates visualizations using **Matplotlib & Seaborn**
 ✅ Automates the ETL pipeline with modular scripts
 
-💅 Project Structure
-
+## 💅 Project Structure
+```
 weather-data-etl/
 │── venv/                # Virtual environment (not committed to Git)
 │── data/                # Folder for storing raw and processed data
@@ -35,144 +33,82 @@ weather-data-etl/
 │── .env                 # Environment variables (API keys, etc.)
 │── requirements.txt     # Dependencies for easy setup
 │── README.md            # Project overview & instructions
+```
 
-🛋️ Setup Instructions
+## 🛋️ Setup Instructions
 
-1️⃣ Clone the Repository
-
+### **1️⃣ Clone the Repository**
+```sh
 git clone https://github.com/yourusername/weather-data-etl.git
 cd weather-data-etl
+```
 
-2️⃣ Create and Activate a Virtual Environment
-
-Windows (Command Prompt)
-
+### **2️⃣ Create and Activate a Virtual Environment**
+#### *Windows (Command Prompt)*
+```sh
 python -m venv venv
 venv\Scripts\activate
-
-macOS/Linux (Terminal)
-
+```
+#### *macOS/Linux (Terminal)*
+```sh
 python3 -m venv venv
 source venv/bin/activate
+```
 
-3️⃣ Install Dependencies
-
+### **3️⃣ Install Dependencies**
+```sh
 pip install -r requirements.txt
+```
 
-4️⃣ Set Up Environment Variables
-
-Create a .env file in the root folder and add your KNMI API key (if needed):
-
+### **4️⃣ Set Up Environment Variables**
+- Create a `.env` file in the root folder and add your **KNMI API key** (if needed):
+```sh
 API_KEY=your_knmi_api_key_here
+```
 
-5️⃣ Run the ETL Pipeline
-
-Extract Data from the API or KNMI website:
-
+### **5️⃣ Run the ETL Pipeline**
+- **Extract Data** from the API or KNMI website:
+```sh
 python scripts/extract.py
-
-Transform and Clean Data:
-
+```
+- **Transform and Clean Data**:
+```sh
 python scripts/transform.py
-
-Load Data into CSV with incremental updates:
-
+```
+- **Load Data into CSV with incremental updates**:
+```sh
 python scripts/load.py
-
-Generate Visualizations:
-
+```
+- **Generate Visualizations**:
+```sh
 python scripts/main.py
+```
 
-📊 Data Fields
-
+## 📊 Data Fields
 This project collects the following weather data:
+| Field                   | Description                      | Unit   |
+|-------------------------|--------------------------------|--------|
+| **datetime**            | Date & hour of measurement     | UTC    |
+| **station_number**      | Weather station ID             | Text   |
+| **wind_direction**      | Wind direction                 | Degrees|
+| **avg_windspeed_1h**    | Average wind speed (1h)        | m/s    |
+| **temp_time_observation** | Temperature at time of observation | °C |
+| **precip_dur_decim**    | Duration of precipitation      | Hours  |
+| **hourly_precip_mm**    | Rainfall amount (hourly)       | mm     |
+| **air_press_hPa**       | Air pressure                   | hPa    |
+| **fog**                 | Fog indicator                  | 0/1    |
+| **snow**                | Snow indicator                 | 0/1    |
+| **thunder**             | Thunderstorm indicator         | 0/1    |
 
-Field
-
-Description
-
-Unit
-
-datetime
-
-Date & hour of measurement
-
-UTC
-
-station_number
-
-Weather station ID
-
-Text
-
-wind_direction
-
-Wind direction
-
-Degrees
-
-avg_windspeed_1h
-
-Average wind speed (1h)
-
-m/s
-
-temp_time_observation
-
-Temperature at time of observation
-
-°C
-
-precip_dur_decim
-
-Duration of precipitation
-
-Hours
-
-hourly_precip_mm
-
-Rainfall amount (hourly)
-
-mm
-
-air_press_hPa
-
-Air pressure
-
-hPa
-
-fog
-
-Fog indicator
-
-0/1
-
-snow
-
-Snow indicator
-
-0/1
-
-thunder
-
-Thunderstorm indicator
-
-0/1
-
-📊 Visualizations
-
+## 📊 Visualizations
 This project includes line plots showing temperature trends over time:
+- **Hourly temperature trends** (last 24 hours)
+- **Daily temperature trends** (last 7 days & last month)
+- **Wind speed & precipitation correlation analysis**
 
-Hourly temperature trends (last 24 hours)
+### **Example Temperature Trend Plot**
+![Sample Plot](reports/figures/temperature_trends.png)
 
-Daily temperature trends (last 7 days & last month)
+## 💜 License
+This project is open-source and available under the **MIT License**.
 
-Wind speed & precipitation correlation analysis
-
-Example Temperature Trend Plot
-
-
-
-💜 License
-
-This project is open-source and available under the MIT License.
