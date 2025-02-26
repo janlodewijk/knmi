@@ -23,7 +23,5 @@ file_path = 'data/raw/vorigemaand.txt'
 extract(url)
 df = transform(file_path)
 load(df)
-
-#Perform the visualization
-fig = temperature_trends()
-fig.savefig('reports/figures/temperature_trends.png', dpi=300, bbox_inches='tight')
+print(df.shape)
+print(df.isna().sum())

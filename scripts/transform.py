@@ -57,6 +57,19 @@ def transform(file_path):
     num_cols = ['avg_windspeed_1h', 'temp_time_observation', 'precip_dur_decim', 'hourly_precip_mm', 'air_press_hPa']
     for col in num_cols:
         weather_data.loc[:, col] = pd.to_numeric(weather_data[col], errors='coerce')  # Convert to float, setting errors to NaN
+        
+    # Forward fill missing values for weather trends
+    weather_data.loc[:, 'air_press_hPa'] = weather_data['air_press_hPa'].fillna(method='ffill')
+    weather_data.loc[:, 'avg_windspeed_1h'] = weather_data['avg_windspeed_1h'].fillna(method='ffill')
+    
+    # Assume that there was no precipation for null values
+    weather_data.loc[:, 'precip_dur_decim'] = weather_data['precip_dur_decim'].fillna(0)
+    weather_data.loc[:, 'hourly_precip_mm'] = weather_data['hourly_precip_mm'].fillna(0)
+    
+    # For fog, snow and thunder, assume there was no occurence for null values
+    weather_data.loc[:, 'fog'] = weather_data['fog'].fillna(0)
+    weather_data.loc[:, 'snow'] = weather_data['snow'].fillna(0)
+    weather_data.loc[:, 'thunder'] = weather_data['thunder'].fillna(0)
     
     # Divide the temperature by 10 to get the actual temperature
     weather_data.loc[:, 'temp_time_observation'] = weather_data['temp_time_observation'] / 10
