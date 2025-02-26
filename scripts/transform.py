@@ -1,6 +1,10 @@
 import pandas as pd
 import logging
 import numpy as np
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 
 def transform(file_path):
     """

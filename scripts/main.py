@@ -3,10 +3,9 @@ from utils import setup_logger
 from extract import extract
 from load import load
 from transform import transform
-from visualize import temperature_trends
 import os
 import logging
-import matplotlib.pyplot as plt
+
 
 
 load_dotenv()
@@ -24,4 +23,4 @@ extract(url)
 df = transform(file_path)
 load(df)
 print(df.shape)
-print(df.isna().sum())
+print(df.nunique())
